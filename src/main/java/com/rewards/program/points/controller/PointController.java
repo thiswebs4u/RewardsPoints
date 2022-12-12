@@ -91,36 +91,31 @@ public class PointController {
 
     public List<Results> buildResults(Map<String, List<Transaction>> map) {
         List<Results> results = map
-                .values()
+                .entrySet()
                 .stream()
-                .flatMap(list -> list.stream())
-                .map(t -> {
-                    Map<String, List<Integer>> transActionsByMonth = getTransactionsByMonth(map.get(t.getCustomer()));
+                .map((e) -> {
+                    Map<String, List<Integer>> transActionsByMonth = getTransactionsByMonth(map.get(e.getKey()));
                     return Results.builder()
-                            .customer(t.getCustomer())
+                            .customer(e.getKey())
                             .monthlyTotals(getTransActionsByMonthTotals(transActionsByMonth))
                             .total(getTotal(transActionsByMonth))
                             .build();
                 })
                 .collect(Collectors.toList());
-
         return results;
     }
-
     public int getTotal(Map<String, List<Integer>> monthlyTransactions) {
         return monthlyTransactions.values().stream()
                 .flatMap(list -> list.stream())
                 .reduce(0, Integer::sum);
     }
-
-    @PostMapping(path ="/test", consumes = MediaType.APPLICATION_JSON_VALUE,produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping("/test")
     @ResponseBody
-    public /*List<Results>*/ String getPoints(@RequestBody Transactions transactions) throws ParseException {
+    public List<Results> getPoints(@RequestBody Transactions transactions) throws ParseException {
         int points = 0;
         Map<String, List<Transaction>> map = transactionsByName(transactions);
 
-//        return buildResults(map);
-        return "good";
+        return buildResults(map);
     }
 
 //        /*
