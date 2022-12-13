@@ -1,25 +1,21 @@
 package com.rewards.program.points.controller;
 
-import com.rewards.program.points.controller.Points.Results;
-import com.rewards.program.points.controller.Points.Util;
-import lombok.Builder;
-import lombok.Data;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.http.MediaType;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.text.ParseException;
-import java.time.LocalDate;
-import java.time.Month;
-import java.time.ZoneId;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
-import static java.util.stream.Collectors.*;
 
 
 /*
@@ -84,22 +80,20 @@ public class PointController {
         List list = new ArrayList();
 
         for (String month : monthTransactions.keySet()) {
-            list.add(MonthlyTotal.builder().month(month).total(monthTransactions.get(month).stream().reduce(0, Integer::sum)).build());
+            list.add(new MonthlyTotal(month,monthTransactions.get(month).stream().reduce(0, Integer::sum)));
         }
         return list;
     }
 
-    public List<Results> buildResults(Map<String, List<Transaction>> map) {
-        List<Results> results = map
+    public List<Result> buildResults(Map<String, List<Transaction>> map) {
+        List<Result> results = map
                 .entrySet()
                 .stream()
                 .map((e) -> {
                     Map<String, List<Integer>> transActionsByMonth = getTransactionsByMonth(map.get(e.getKey()));
-                    return Results.builder()
-                            .customer(e.getKey())
-                            .monthlyTotals(getTransActionsByMonthTotals(transActionsByMonth))
-                            .total(getTotal(transActionsByMonth))
-                            .build();
+                    return new Result(e.getKey(),
+                            getTransActionsByMonthTotals(transActionsByMonth),
+                            getTotal(transActionsByMonth));
                 })
                 .collect(Collectors.toList());
         return results;
@@ -111,11 +105,13 @@ public class PointController {
     }
     @PostMapping("/test")
     @ResponseBody
-    public List<Results> getPoints(@RequestBody Transactions transactions) throws ParseException {
-        int points = 0;
+    public ResponseEntity<String> getPoints(@RequestBody Transactions transactions) throws ParseException, JsonProcessingException {
         Map<String, List<Transaction>> map = transactionsByName(transactions);
 
-        return buildResults(map);
+        ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+        String json = ow.writeValueAsString(buildResults(map));
+
+        return new ResponseEntity<>(json, HttpStatus.OK);
     }
 
 //        /*
