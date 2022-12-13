@@ -1,12 +1,8 @@
 package com.rewards.program.points.controller;
 
-import com.rewards.program.points.controller.PointController;
-import lombok.ToString;
-
 import java.util.ArrayList;
 import java.util.List;
 
-@ToString
 public class Transactions {
     List<Transaction> transactions = new ArrayList<Transaction>();
 

@@ -1,21 +1,22 @@
 package com.rewards.program.points.controller;
 
-import lombok.ToString;
-
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.Month;
 import java.time.ZoneId;
 import java.util.Date;
 
-@ToString
 public class Transaction {
-    String customer;
-    int dollars;
-    Date date;
-
+    private String customer;
+    private int dollars;
+    private Date date;
+    public Transaction() {
+    }
+    public Transaction( String customer, int dollars, String date) throws ParseException {
+        this.customer = customer;
+        this.dollars = dollars;
+        this.setDate(date);
+    }
     public String getDate() {
         DateFormat fmt = new SimpleDateFormat("MM/dd/yy");
 
@@ -26,16 +27,6 @@ public class Transaction {
         DateFormat fmt = new SimpleDateFormat("MM/dd/yy");
         this.date = fmt.parse(date);
     }
-
-
-    public Transaction() {
-    }
-    public Transaction( String customer, int dollars, String date) throws ParseException {
-        this.customer = customer;
-        this.dollars = dollars;
-        this.setDate(date);
-    }
-
     public String getCustomer() {
         return customer;
     }
@@ -57,4 +48,5 @@ public class Transaction {
                 .atZone(ZoneId.systemDefault())
                 .toLocalDate().getMonth().toString();
     }
+
 }

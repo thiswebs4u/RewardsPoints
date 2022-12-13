@@ -1,4 +1,4 @@
-package com.rewards.program.points.controller.Points;
+package com.rewards.program.points.controller;
 
 import com.rewards.program.points.controller.MonthlyTotal;
 import lombok.Builder;
