@@ -1,5 +1,4 @@
 package com.rewards.program.points.controller;
-
 public class Util {
     public static int calcPoints(int dollars) {
         int points = 0;

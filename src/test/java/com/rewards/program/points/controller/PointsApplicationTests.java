@@ -1,4 +1,4 @@
-package com.rewards.program.points;
+package com.rewards.program.points.controller;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
