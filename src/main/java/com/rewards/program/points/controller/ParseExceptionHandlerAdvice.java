@@ -12,7 +12,7 @@ import java.text.ParseException;
 @ControllerAdvice
 public class ParseExceptionHandlerAdvice {
     @ResponseBody
-    @ExceptionHandler({ParseException.class, JsonProcessingException.class})
+    @ExceptionHandler({JsonProcessingException.class})
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     String parseExceptionHandler(ParseException ex) {
         return ex.getMessage();

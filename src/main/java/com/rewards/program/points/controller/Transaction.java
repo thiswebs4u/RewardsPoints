@@ -10,13 +10,16 @@ public class Transaction {
     private String customer;
     private int dollars;
     private Date date;
+
     public Transaction() {
     }
-    public Transaction( String customer, int dollars, String date) throws ParseException {
+
+    public Transaction(String customer, int dollars, String date) throws ParseException {
         this.customer = customer;
         this.dollars = dollars;
         this.setDate(date);
     }
+
     public String getDate() {
         DateFormat fmt = new SimpleDateFormat("MM/dd/yy");
 
@@ -27,6 +30,7 @@ public class Transaction {
         DateFormat fmt = new SimpleDateFormat("MM/dd/yy");
         this.date = fmt.parse(date);
     }
+
     public String getCustomer() {
         return customer;
     }

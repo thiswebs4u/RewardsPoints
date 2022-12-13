@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -105,7 +104,7 @@ public class PointController {
     }
     @PostMapping("/test")
     @ResponseBody
-    public ResponseEntity<String> getPoints(@RequestBody Transactions transactions) throws ParseException, JsonProcessingException {
+    public ResponseEntity<String> getPoints(@RequestBody Transactions transactions) throws JsonProcessingException {
         Map<String, List<Transaction>> map = transactionsByName(transactions);
 
         ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
