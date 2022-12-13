@@ -102,7 +102,7 @@ public class PointController {
                 .flatMap(list -> list.stream())
                 .reduce(0, Integer::sum);
     }
-    @PostMapping("/test")
+    @PostMapping("/calcPoints")
     @ResponseBody
     public ResponseEntity<String> getPoints(@RequestBody Transactions transactions) throws JsonProcessingException {
         Map<String, List<Transaction>> map = transactionsByName(transactions);
