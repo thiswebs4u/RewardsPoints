@@ -65,6 +65,8 @@ public class PointController {
     public ResponseEntity<String> getPoints(@RequestBody Transactions transactions) throws JsonProcessingException {
         Map<String, List<Transaction>> map = pointsService.transactionsByName(transactions);
 
+
+
         ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
         String json = ow.writeValueAsString(pointsService.buildResults(map));
 
@@ -89,4 +91,6 @@ public class PointController {
 //        }
 //
 //        return points;
+
+
 }

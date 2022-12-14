@@ -53,14 +53,14 @@ public class PointRewardsControllerTest {
     void setUp() throws ParseException {
         transactions = new Transactions();
 
-        //transactions.getTransactions().add(new Transaction("joe", 40, "10/06/22"));
-        //transactions.getTransactions().add(new Transaction("joe", 40, "10/07/22"));
-        transactions.getTransactions().add(new Transaction("joe", 90, "10/01/22"));
-        transactions.getTransactions().add(new Transaction("joe", 90, "10/05/22"));
-        transactions.getTransactions().add(new Transaction("joe", 100, "11/10/22"));
-        transactions.getTransactions().add(new Transaction("joe", 100, "11/12/22"));
-        transactions.getTransactions().add(new Transaction("joe", 120, "12/10/22"));
-        transactions.getTransactions().add(new Transaction("joe", 120, "12/12/22"));
+        //transactions.getTransactions().add(new Transaction("Joe Jackson", 40, "10/06/22"));
+        //transactions.getTransactions().add(new Transaction("Joe Jackson", 40, "10/07/22"));
+        transactions.getTransactions().add(new Transaction("Joe Jackson", 90, "10/01/22"));
+        transactions.getTransactions().add(new Transaction("Joe Jackson", 90, "10/05/22"));
+        transactions.getTransactions().add(new Transaction("Joe Jackson", 100, "11/10/22"));
+        transactions.getTransactions().add(new Transaction("Joe Jackson", 100, "11/12/22"));
+        transactions.getTransactions().add(new Transaction("Joe Jackson", 120, "12/10/22"));
+        transactions.getTransactions().add(new Transaction("Joe Jackson", 120, "12/12/22"));
         typeRef
                 = new TypeReference<List<Result>>() {};
         mapper = new ObjectMapper();
@@ -70,7 +70,7 @@ public class PointRewardsControllerTest {
     @Test
     public void postTest() throws Exception {
 
-        List<Result> serviceResult = Arrays.asList(new Result("joe",
+        List<Result> serviceResult = Arrays.asList(new Result("Joe Jackson",
                 Arrays.asList(new MonthlyTotal("OCTOBER",80),
                         new MonthlyTotal("DECEMBER",80),
                         new MonthlyTotal("NOVEMBER",100)),
@@ -99,7 +99,7 @@ public class PointRewardsControllerTest {
 
 //    [
 //            {
-//            "customer":"joe",
+//            "customer":"Joe Jackson",
 //            "monthlyTotals":[
 //            {
 //            "month":"OCTOBER",
@@ -121,32 +121,32 @@ public class PointRewardsControllerTest {
 
     /*
         {
-            "customer": "joe",
+            "customer": "Joe Jackson",
             "dollars": 90,
             "date": "10/01/22"
         },
         {
-            "customer": "joe",
+            "customer": "Joe Jackson",
             "dollars": 90,
             "date": "10/01/22"
         },
         {
-            "customer": "joe",
+            "customer": "Joe Jackson",
             "dollars": 100,
             "date": "11/10/22"
         },
         {
-            "customer": "joe",
+            "customer": "Joe Jackson",
             "dollars": 100,
             "date": "11/12/22"
         },
         {
-            "customer": "joe",
+            "customer": "Joe Jackson",
             "dollars": 120,
             "date": "12/10/22"
         },
         {
-            "customer": "joe",
+            "customer": "Joe Jackson",
             "dollars": 120,
             "date": "12/12/22"
         },

@@ -5,17 +5,22 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.text.ParseException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
@@ -24,39 +29,42 @@ import static org.mockito.Mockito.when;
 //public class PointRewardsControllerTest {
 //    @WebMvcTest(controllers = PointController.class)
 //    @ActiveProfiles("test")
-@ExtendWith(MockitoExtension.class)
+@RunWith(SpringRunner.class)
+@SpringBootTest(classes = { PointsService.class })
+@EnableConfigurationProperties
 public class PointRewardsServiceTest {
     @Autowired
     PointsService pointsService;
 
-    Transactions transactions = null;
     ObjectMapper mapper;
     TypeReference<List<Result>> typeRef;
+
+    Transactions transactions = null;
 
     @BeforeEach
     void setUp() throws ParseException {
         transactions = new Transactions();
 
-        transactions.getTransactions().add(new Transaction("joe", 90, "10/01/22"));
-        transactions.getTransactions().add(new Transaction("joe", 90, "10/05/22"));
-        transactions.getTransactions().add(new Transaction("joe", 100, "11/10/22"));
-        transactions.getTransactions().add(new Transaction("joe", 100, "11/12/22"));
-        transactions.getTransactions().add(new Transaction("joe", 120, "12/10/22"));
-        transactions.getTransactions().add(new Transaction("joe", 120, "12/12/22"));
+        transactions.getTransactions().add(new Transaction("Joe Jackson", 90, "10/01/22"));
+        transactions.getTransactions().add(new Transaction("Joe Jackson", 90, "10/05/22"));
+        transactions.getTransactions().add(new Transaction("Joe Jackson", 100, "11/10/22"));
+        transactions.getTransactions().add(new Transaction("Joe Jackson", 100, "11/12/22"));
+        transactions.getTransactions().add(new Transaction("Joe Jackson", 120, "12/10/22"));
+        transactions.getTransactions().add(new Transaction("Joe Jackson", 120, "12/12/22"));
 
-        transactions.getTransactions().add(new Transaction("jill", 90, "10/10/22"));
-        transactions.getTransactions().add(new Transaction("jill", 90, "10/15/22"));
-        transactions.getTransactions().add(new Transaction("jill", 100, "11/10/22"));
-        transactions.getTransactions().add(new Transaction("jill", 100, "11/25/22"));
-        transactions.getTransactions().add(new Transaction("jill", 120, "12/10/22"));
-        transactions.getTransactions().add(new Transaction("jill", 120,  "12/25/22"));
+        transactions.getTransactions().add(new Transaction("Jill Gentry", 90, "10/10/22"));
+        transactions.getTransactions().add(new Transaction("Jill Gentry", 90, "10/15/22"));
+        transactions.getTransactions().add(new Transaction("Jill Gentry", 100, "11/10/22"));
+        transactions.getTransactions().add(new Transaction("Jill Gentry", 100, "11/25/22"));
+        transactions.getTransactions().add(new Transaction("Jill Gentry", 120, "12/10/22"));
+        transactions.getTransactions().add(new Transaction("Jill Gentry", 120,  "12/25/22"));
 
-        transactions.getTransactions().add(new Transaction("bill", 90,  "10/01/22"));
-        transactions.getTransactions().add(new Transaction("bill", 10,  "10/01/22"));
-        transactions.getTransactions().add(new Transaction("bill", 100,  "11/01/22"));
-        transactions.getTransactions().add(new Transaction("bill", 120,   "11/01/22"));
-        transactions.getTransactions().add(new Transaction("bill", 120,  "12/01/22"));
-        transactions.getTransactions().add(new Transaction("bill", 120,  "12/25/22"));
+        transactions.getTransactions().add(new Transaction("Bill Hart", 90,  "10/01/22"));
+        transactions.getTransactions().add(new Transaction("Bill Hart", 10,  "10/01/22"));
+        transactions.getTransactions().add(new Transaction("Bill Hart", 100,  "11/01/22"));
+        transactions.getTransactions().add(new Transaction("Bill Hart", 120,   "11/01/22"));
+        transactions.getTransactions().add(new Transaction("Bill Hart", 120,  "12/01/22"));
+        transactions.getTransactions().add(new Transaction("Bill Hart", 120,  "12/25/22"));
 
         typeRef
                 = new TypeReference<List<Result>>() {};
@@ -67,19 +75,96 @@ public class PointRewardsServiceTest {
     @Test
     public void postTest() throws Exception {
 
-        List<Result> serviceResult = Arrays.asList(new Result("joe",
+        List<Result> serviceResult = Arrays.asList(new Result("Joe Jackson",
                 Arrays.asList(new MonthlyTotal("OCTOBER",80),
                         new MonthlyTotal("DECEMBER",80),
                         new MonthlyTotal("NOVEMBER",100)),
                     260));
 
-        when(pointsService.buildResults(any())).thenReturn(serviceResult);
+//        when(pointsService.buildResults(any())).thenReturn(serviceResult);
 
-        ResponseEntity<String> controllerResult = pointController.getPoints(transactions);
 
-        assertEquals(controllerResult.getStatusCode(), HttpStatus.OK);
-        List<Result>  jsonToJavaObject = mapper.readValue(controllerResult.getBody(), typeRef);
-        assertEquals(serviceResult.size(), jsonToJavaObject.size());
+        //pointsService.transactionsByName()
+        Map<String, List<Transaction>> customerToTransactionsMap = pointsService.transactionsByName(transactions);
+
+        List<Result> result = pointsService.buildResults(customerToTransactionsMap);
+
+
+        /**
+         * Calculate for Joe Jackson
+         */
+        Map<String, List<Integer>> transactionsByMonth = pointsService.getTransactionsByMonth(customerToTransactionsMap.get("Joe Jackson"));
+
+        int total = pointsService.getTotal(transactionsByMonth);
+
+        assertEquals(transactionsByMonth.size(), 3);
+
+        int totalCompare = transactionsByMonth.values().stream()
+                .flatMap(list -> list.stream())
+                .reduce(0, Integer::sum);
+
+        assertEquals(totalCompare,total);
+
+        System.out.println();
+        /**
+         * Calculate for Jill Gentry
+         */
+        transactionsByMonth = pointsService.getTransactionsByMonth(customerToTransactionsMap.get("Jill Gentry"));
+
+        total = pointsService.getTotal(transactionsByMonth);
+
+        assertEquals(transactionsByMonth.size(), 3);
+
+        totalCompare = transactionsByMonth.values().stream()
+                .flatMap(list -> list.stream())
+                .reduce(0, Integer::sum);
+
+        assertEquals(totalCompare,total);
+
+        /**
+         * Calculate for "Bill Hart"
+         */
+        transactionsByMonth = pointsService.getTransactionsByMonth(customerToTransactionsMap.get("Bill Hart"));
+
+        total = pointsService.getTotal(transactionsByMonth);
+
+        assertEquals(transactionsByMonth.size(), 3);
+
+        totalCompare = transactionsByMonth.values().stream()
+                .flatMap(list -> list.stream())
+                .reduce(0, Integer::sum);
+
+        assertEquals(totalCompare,total);
+
+        int numberOfPoints =numberOfPoints = pointsService.calcPoints(0);
+
+        numberOfPoints = pointsService.calcPoints(-5);
+        numberOfPoints = pointsService.calcPoints(50);
+        numberOfPoints = pointsService.calcPoints(100);
+        numberOfPoints = pointsService.calcPoints(101);
+
+        // A customer receives 2 points for every dollar spent over $100 in each transaction,
+        // plus 1 point for every dollar spent between $50 and $100 in each transaction.
+        // (e.g. a $120 purchase = 2x$20 + 1x$50 = 90 points).
+
+        System.out.println();
+
+
+        //customerToTransactionsMap.entrySet().stream().map();
+
+        //pointsService.transActionsByMonth();
+
+        //pointsService.buildResults((Map<String, List<Transaction>> map)
+        //=
+        //pointsService.getTransactionsByMonth()
+        //pointsService.getTransActionsByMonthTotals()
+
+
+        //assertEquals(controllerResult.getStatusCode(), HttpStatus.OK);
+
+        //List<Result>  jsonToJavaObject = mapper.readValue(controllerResult.getBody(), typeRef);
+
+        //assertEquals(serviceResult.size(), jsonToJavaObject.size());
 
 
         System.out.println();
@@ -96,7 +181,7 @@ public class PointRewardsServiceTest {
 
 //    [
 //            {
-//            "customer":"joe",
+//            "customer":"Joe Jackson",
 //            "monthlyTotals":[
 //            {
 //            "month":"OCTOBER",
@@ -118,32 +203,32 @@ public class PointRewardsServiceTest {
 
     /*
         {
-            "customer": "joe",
+            "customer": "Joe Jackson",
             "dollars": 90,
             "date": "10/01/22"
         },
         {
-            "customer": "joe",
+            "customer": "Joe Jackson",
             "dollars": 90,
             "date": "10/01/22"
         },
         {
-            "customer": "joe",
+            "customer": "Joe Jackson",
             "dollars": 100,
             "date": "11/10/22"
         },
         {
-            "customer": "joe",
+            "customer": "Joe Jackson",
             "dollars": 100,
             "date": "11/12/22"
         },
         {
-            "customer": "joe",
+            "customer": "Joe Jackson",
             "dollars": 120,
             "date": "12/10/22"
         },
         {
-            "customer": "joe",
+            "customer": "Joe Jackson",
             "dollars": 120,
             "date": "12/12/22"
         },
