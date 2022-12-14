@@ -27,7 +27,7 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 public class PointRewardsServiceTest {
     @Autowired
-    PointsService +;
+    PointsService pointsService;
 
     Transactions transactions = null;
     ObjectMapper mapper;
