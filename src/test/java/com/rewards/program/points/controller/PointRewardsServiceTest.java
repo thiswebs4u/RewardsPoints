@@ -2,9 +2,6 @@ package com.rewards.program.points.controller;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.http.*;
-import com.fasterxml.jackson.databind.ObjectWriter;
-import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -12,38 +9,25 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.text.ParseException;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 //public class PointRewardsControllerTest {
 //    @WebMvcTest(controllers = PointController.class)
 //    @ActiveProfiles("test")
 @ExtendWith(MockitoExtension.class)
-public class PointRewardsControllerTest {
-    @InjectMocks
-    PointController pointController;
-
-    @Mock
-    PointsService pointsService;
-
+public class PointRewardsServiceTest {
     @Autowired
-    private MockMvc mockMvc;
+    PointsService +;
 
     Transactions transactions = null;
     ObjectMapper mapper;
@@ -53,14 +37,27 @@ public class PointRewardsControllerTest {
     void setUp() throws ParseException {
         transactions = new Transactions();
 
-        //transactions.getTransactions().add(new Transaction("joe", 40, "10/06/22"));
-        //transactions.getTransactions().add(new Transaction("joe", 40, "10/07/22"));
         transactions.getTransactions().add(new Transaction("joe", 90, "10/01/22"));
         transactions.getTransactions().add(new Transaction("joe", 90, "10/05/22"));
         transactions.getTransactions().add(new Transaction("joe", 100, "11/10/22"));
         transactions.getTransactions().add(new Transaction("joe", 100, "11/12/22"));
         transactions.getTransactions().add(new Transaction("joe", 120, "12/10/22"));
         transactions.getTransactions().add(new Transaction("joe", 120, "12/12/22"));
+
+        transactions.getTransactions().add(new Transaction("jill", 90, "10/10/22"));
+        transactions.getTransactions().add(new Transaction("jill", 90, "10/15/22"));
+        transactions.getTransactions().add(new Transaction("jill", 100, "11/10/22"));
+        transactions.getTransactions().add(new Transaction("jill", 100, "11/25/22"));
+        transactions.getTransactions().add(new Transaction("jill", 120, "12/10/22"));
+        transactions.getTransactions().add(new Transaction("jill", 120,  "12/25/22"));
+
+        transactions.getTransactions().add(new Transaction("bill", 90,  "10/01/22"));
+        transactions.getTransactions().add(new Transaction("bill", 10,  "10/01/22"));
+        transactions.getTransactions().add(new Transaction("bill", 100,  "11/01/22"));
+        transactions.getTransactions().add(new Transaction("bill", 120,   "11/01/22"));
+        transactions.getTransactions().add(new Transaction("bill", 120,  "12/01/22"));
+        transactions.getTransactions().add(new Transaction("bill", 120,  "12/25/22"));
+
         typeRef
                 = new TypeReference<List<Result>>() {};
         mapper = new ObjectMapper();

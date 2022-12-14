@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -57,15 +58,10 @@ public class PointController {
 
     @Autowired
     PointsService pointsService;
-    //@RequestMapping(value = "/test", method = POST, consumes = "application/json",produces = "application/json")
 
-
-
-
-
-
-    @PostMapping("/calcPoints")
-    @ResponseBody
+    @PostMapping(value = "/calcPoints",
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> getPoints(@RequestBody Transactions transactions) throws JsonProcessingException {
         Map<String, List<Transaction>> map = pointsService.transactionsByName(transactions);
 

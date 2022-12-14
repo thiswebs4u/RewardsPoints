@@ -1,5 +1,6 @@
 package com.rewards.program.points.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Result {
@@ -7,7 +8,13 @@ public class Result {
     List<MonthlyTotal> monthlyTotals;
     int total;
 
+    public Result() {
+        super();
+        monthlyTotals = new ArrayList<MonthlyTotal>();
+    }
+
     public Result(String customer, List<MonthlyTotal> monthlyTotals, int total) {
+        super();
         this.customer = customer;
         this.monthlyTotals = monthlyTotals;
         this.total = total;

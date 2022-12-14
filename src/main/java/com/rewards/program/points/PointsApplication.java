@@ -1,4 +1,4 @@
-package com.rewards.program.points.controller.controller;
+package com.rewards.program.points;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

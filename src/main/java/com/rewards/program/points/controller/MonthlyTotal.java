@@ -4,7 +4,10 @@ public class MonthlyTotal {
     String month;
     int total;
 
+    public MonthlyTotal () {
+    }
     public MonthlyTotal(String month, int total) {
+        super();
         this.month = month;
         this.total = total;
     }
