@@ -13,5 +13,5 @@ Check solution into GitHub
 
 # Assumptions
 * An amount of 50 is not included in the one point calculation
-* Points between 50 and 100 are 51 to 100 inclusive, this satisfies the 
+* Points 51 to 100 are inclusive, this satisfies the 
 50 points over 100

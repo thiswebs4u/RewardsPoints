@@ -21,8 +21,11 @@ import java.text.ParseException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
@@ -81,10 +84,6 @@ public class PointRewardsServiceTest {
                         new MonthlyTotal("NOVEMBER",100)),
                     260));
 
-//        when(pointsService.buildResults(any())).thenReturn(serviceResult);
-
-
-        //pointsService.transactionsByName()
         Map<String, List<Transaction>> customerToTransactionsMap = pointsService.transactionsByName(transactions);
 
         List<Result> result = pointsService.buildResults(customerToTransactionsMap);
@@ -105,7 +104,13 @@ public class PointRewardsServiceTest {
 
         assertEquals(totalCompare,total);
 
+        List<String> months = transactionsByMonth.keySet().stream().collect(Collectors.toList());
+        assertTrue(months.contains("OCTOBER"));
+        assertTrue(months.contains("NOVEMBER"));
+        assertTrue(months.contains("DECEMBER"));
+
         System.out.println();
+
         /**
          * Calculate for Jill Gentry
          */
@@ -120,6 +125,11 @@ public class PointRewardsServiceTest {
                 .reduce(0, Integer::sum);
 
         assertEquals(totalCompare,total);
+
+        months = transactionsByMonth.keySet().stream().collect(Collectors.toList());
+        assertTrue(months.contains("OCTOBER"));
+        assertTrue(months.contains("NOVEMBER"));
+        assertTrue(months.contains("DECEMBER"));
 
         /**
          * Calculate for "Bill Hart"
@@ -136,12 +146,17 @@ public class PointRewardsServiceTest {
 
         assertEquals(totalCompare,total);
 
-        int numberOfPoints =numberOfPoints = pointsService.calcPoints(0);
+        months = transactionsByMonth.keySet().stream().collect(Collectors.toList());
+        assertTrue(months.contains("OCTOBER"));
+        assertTrue(months.contains("NOVEMBER"));
+        assertTrue(months.contains("DECEMBER"));
 
-        numberOfPoints = pointsService.calcPoints(-5);
-        numberOfPoints = pointsService.calcPoints(50);
-        numberOfPoints = pointsService.calcPoints(100);
-        numberOfPoints = pointsService.calcPoints(101);
+
+        assertEquals(pointsService.calcPoints(0),0);
+        assertEquals(pointsService.calcPoints(-5),0);
+        assertEquals(pointsService.calcPoints(50),0);
+        assertEquals(pointsService.calcPoints(100),50);
+        assertEquals(pointsService.calcPoints(101),52);
 
         // A customer receives 2 points for every dollar spent over $100 in each transaction,
         // plus 1 point for every dollar spent between $50 and $100 in each transaction.
