@@ -1,13 +1,16 @@
-package com.rewards.program.points.controller;
+package com.rewards.program.points.domain;
+
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Service
 public class Transactions {
-    List<Transaction> transactions = new ArrayList<Transaction>();
+    private List<Transaction> transactions;
 
-    Transactions() {
-
+    public Transactions() {
+        transactions = new ArrayList<Transaction>();
     }
 
     public List<Transaction> getTransactions() {
@@ -21,6 +24,4 @@ public class Transactions {
     public void addTransaction(Transaction transaction) {
         transactions.add(transaction);
     }
-
-
 }

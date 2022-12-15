@@ -1,4 +1,4 @@
-package com.rewards.program.points.controller;
+package com.rewards.program.points.exception;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.http.HttpStatus;
