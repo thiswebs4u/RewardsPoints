@@ -24,9 +24,7 @@ import java.util.stream.Collectors;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@RunWith(SpringRunner.class)
 @SpringBootTest(classes = {PointsService.class})
-@EnableConfigurationProperties
 public class PointRewardsServiceTest {
     @Autowired
     PointsService pointsService;
