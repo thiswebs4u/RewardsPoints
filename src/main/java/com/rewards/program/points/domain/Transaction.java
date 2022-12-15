@@ -1,4 +1,4 @@
-package com.rewards.program.points.controller;
+package com.rewards.program.points.domain;
 
 import java.text.DateFormat;
 import java.text.ParseException;

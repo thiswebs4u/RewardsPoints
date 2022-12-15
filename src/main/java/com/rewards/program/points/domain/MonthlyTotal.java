@@ -1,8 +1,8 @@
-package com.rewards.program.points.controller;
+package com.rewards.program.points.domain;
 
 public class MonthlyTotal {
-    String month;
-    int total;
+    private String month;
+    private int total;
 
     public MonthlyTotal () {
     }

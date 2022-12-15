@@ -1,5 +1,9 @@
-package com.rewards.program.points.controller;
+package com.rewards.program.points.service;
 
+import com.rewards.program.points.domain.MonthlyTotal;
+import com.rewards.program.points.domain.Result;
+import com.rewards.program.points.domain.Transaction;
+import com.rewards.program.points.domain.Transactions;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;

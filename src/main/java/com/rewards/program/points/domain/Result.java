@@ -1,12 +1,12 @@
-package com.rewards.program.points.controller;
+package com.rewards.program.points.domain;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Result {
-    String customer;
-    List<MonthlyTotal> monthlyTotals;
-    int total;
+    private String customer;
+    private List<MonthlyTotal> monthlyTotals;
+    private int total;
 
     public Result() {
         super();
