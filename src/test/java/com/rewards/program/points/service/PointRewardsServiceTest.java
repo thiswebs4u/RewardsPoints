@@ -1,4 +1,4 @@
-package com.rewards.program.points.controller;
+package com.rewards.program.points.service;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -7,13 +7,11 @@ import com.rewards.program.points.domain.Result;
 import com.rewards.program.points.domain.Transaction;
 import com.rewards.program.points.domain.Transactions;
 import com.rewards.program.points.service.PointsService;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import java.text.ParseException;
 import java.util.Arrays;
@@ -68,7 +66,7 @@ public class PointRewardsServiceTest {
     @Test
     public void testServiceMethods() throws Exception {
 
-        Map<String, List<Transaction>> customerToTransactionsMap = pointsService.transactionsByName(transactions);
+        Map<String, List<Transaction>> customerToTransactionsMap = pointsService.getTransactionsByCustomerName(transactions);
 
         List<Result> result = pointsService.buildResults(customerToTransactionsMap);
 
@@ -80,18 +78,18 @@ public class PointRewardsServiceTest {
 
         int total = pointsService.getTotal(transactionsByMonth);
 
-        assertEquals(transactionsByMonth.size(), 3);
+        Assertions.assertEquals(transactionsByMonth.size(), 3);
 
         int totalCompare = transactionsByMonth.values().stream()
                 .flatMap(list -> list.stream())
                 .reduce(0, Integer::sum);
 
-        assertEquals(totalCompare, total);
+        Assertions.assertEquals(totalCompare, total);
 
         List<String> months = transactionsByMonth.keySet().stream().collect(Collectors.toList());
-        assertTrue(months.contains("OCTOBER"));
-        assertTrue(months.contains("NOVEMBER"));
-        assertTrue(months.contains("DECEMBER"));
+        Assertions.assertTrue(months.contains("OCTOBER"));
+        Assertions.assertTrue(months.contains("NOVEMBER"));
+        Assertions.assertTrue(months.contains("DECEMBER"));
 
         System.out.println();
 
@@ -102,18 +100,18 @@ public class PointRewardsServiceTest {
 
         total = pointsService.getTotal(transactionsByMonth);
 
-        assertEquals(transactionsByMonth.size(), 3);
+        Assertions.assertEquals(transactionsByMonth.size(), 3);
 
         totalCompare = transactionsByMonth.values().stream()
                 .flatMap(list -> list.stream())
                 .reduce(0, Integer::sum);
 
-        assertEquals(totalCompare, total);
+        Assertions.assertEquals(totalCompare, total);
 
         months = transactionsByMonth.keySet().stream().collect(Collectors.toList());
-        assertTrue(months.contains("OCTOBER"));
-        assertTrue(months.contains("NOVEMBER"));
-        assertTrue(months.contains("DECEMBER"));
+        Assertions.assertTrue(months.contains("OCTOBER"));
+        Assertions.assertTrue(months.contains("NOVEMBER"));
+        Assertions.assertTrue(months.contains("DECEMBER"));
 
         /**
          * Calculate for "Bill Hart"
@@ -122,18 +120,18 @@ public class PointRewardsServiceTest {
 
         total = pointsService.getTotal(transactionsByMonth);
 
-        assertEquals(transactionsByMonth.size(), 3);
+        Assertions.assertEquals(transactionsByMonth.size(), 3);
 
         totalCompare = transactionsByMonth.values().stream()
                 .flatMap(list -> list.stream())
                 .reduce(0, Integer::sum);
 
-        assertEquals(totalCompare, total);
+        Assertions.assertEquals(totalCompare, total);
 
         months = transactionsByMonth.keySet().stream().collect(Collectors.toList());
-        assertTrue(months.contains("OCTOBER"));
-        assertTrue(months.contains("NOVEMBER"));
-        assertTrue(months.contains("DECEMBER"));
+        Assertions.assertTrue(months.contains("OCTOBER"));
+        Assertions.assertTrue(months.contains("NOVEMBER"));
+        Assertions.assertTrue(months.contains("DECEMBER"));
 
         List<Result> compareResult = Arrays.asList(new Result("Joe Jackson",
                 Arrays.asList(new MonthlyTotal("OCTOBER", 80),
@@ -145,10 +143,10 @@ public class PointRewardsServiceTest {
                 pointsService.buildResults(customerToTransactionsMap);
 
 
-        assertEquals(pointsService.calcPoints(0), 0);
-        assertEquals(pointsService.calcPoints(-5), 0);
-        assertEquals(pointsService.calcPoints(50), 0);
-        assertEquals(pointsService.calcPoints(100), 50);
-        assertEquals(pointsService.calcPoints(101), 52);
+        Assertions.assertEquals(pointsService.calcPoints(0), 0);
+        Assertions.assertEquals(pointsService.calcPoints(-5), 0);
+        Assertions.assertEquals(pointsService.calcPoints(50), 0);
+        Assertions.assertEquals(pointsService.calcPoints(100), 50);
+        Assertions.assertEquals(pointsService.calcPoints(101), 52);
     }
 }

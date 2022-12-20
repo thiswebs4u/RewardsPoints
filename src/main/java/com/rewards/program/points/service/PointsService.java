@@ -20,15 +20,31 @@ public class PointsService {
                 .entrySet()
                 .stream()
                 .map((e) -> {
-                    Map<String, List<Integer>> transActionsByMonth = getTransactionsByMonth(map.get(e.getKey()));
+                    Map<String, List<Integer>> transactionsByMonth = getTransactionsByMonth(map.get(e.getKey()));
                     return new Result(e.getKey(),
-                            getTransActionsByMonthTotals(transActionsByMonth),
-                            getTotal(transActionsByMonth));
+                            getTransactionsByMonthTotals(transactionsByMonth),
+                            getTotal(transactionsByMonth));
                 })
                 .collect(Collectors.toList());
         return results;
     }
-    public Map<String, List<Integer>> getTransactionsByMonth(List<Transaction> trans) {
+    public Map<String, List<Transaction>> getTransactionsByCustomerName(Transactions transactions) {
+        Map<String, List<Transaction>> map = new HashMap<String, List<Transaction>>();
+
+        transactions.getTransactions().forEach(object ->
+                map.computeIfAbsent(object.getCustomer(), k -> new ArrayList<>())
+                        .add(object));
+        return map;
+    }
+    protected List<MonthlyTotal> getTransactionsByMonthTotals(Map<String, List<Integer>> monthTransactions) {
+        List list = new ArrayList();
+
+        for (String month : monthTransactions.keySet()) {
+            list.add(new MonthlyTotal(month,monthTransactions.get(month).stream().reduce(0, Integer::sum)));
+        }
+        return list;
+    }
+    protected Map<String, List<Integer>> getTransactionsByMonth(List<Transaction> trans) {
         Map<String, List<Integer>> map = new HashMap<String, List<Integer>>();
 
         trans.forEach(object ->
@@ -37,31 +53,14 @@ public class PointsService {
 
         return map;
     }
-    public List<MonthlyTotal> getTransActionsByMonthTotals(Map<String, List<Integer>> monthTransactions) {
-        List list = new ArrayList();
 
-        for (String month : monthTransactions.keySet()) {
-            list.add(new MonthlyTotal(month,monthTransactions.get(month).stream().reduce(0, Integer::sum)));
-        }
-        return list;
-    }
-
-    public int getTotal(Map<String, List<Integer>> monthlyTransactions) {
+    protected int getTotal(Map<String, List<Integer>> monthlyTransactions) {
         return monthlyTransactions.values().stream()
                 .flatMap(list -> list.stream())
                 .reduce(0, Integer::sum);
     }
 
-    public Map<String, List<Transaction>> transactionsByName(Transactions transactions) {
-        Map<String, List<Transaction>> map = new HashMap<String, List<Transaction>>();
-
-        transactions.getTransactions().forEach(object ->
-                map.computeIfAbsent(object.getCustomer(), k -> new ArrayList<>())
-                        .add(object));
-        return map;
-    }
-
-    public int calcPoints(int dollars) {
+    protected int calcPoints(int dollars) {
         int points = 0;
 
         if(dollars<51) {
