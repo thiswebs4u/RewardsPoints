@@ -15,3 +15,4 @@ Check solution into GitHub
 * An amount of 50 is not included in the one point calculation
 * Points 51 to 100 are inclusive, this satisfies the 
 50 points over 100
+* Didn't need to deal with scopes, service by default is Singleton
