@@ -10,7 +10,7 @@ public class Result {
 
     public Result() {
         super();
-        monthlyTotals = new ArrayList<MonthlyTotal>();
+        monthlyTotals = new ArrayList<>();
     }
 
     public Result(String customer, List<MonthlyTotal> monthlyTotals, int total) {

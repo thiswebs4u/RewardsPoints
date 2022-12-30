@@ -7,21 +7,21 @@ import java.util.List;
 
 @Service
 public class Transactions {
-    private List<Transaction> transactions;
+    private List<Transaction> allTransactions;
 
     public Transactions() {
-        transactions = new ArrayList<Transaction>();
+        allTransactions = new ArrayList<>();
     }
 
-    public List<Transaction> getTransactions() {
-        return transactions;
+    public List<Transaction> getAllTransactions() {
+        return allTransactions;
     }
 
-    public void setTransactions(List<Transaction> transactions) {
-        this.transactions = transactions;
+    public void setAllTransactions(List<Transaction> allTransactions) {
+        this.allTransactions = allTransactions;
     }
 
     public void addTransaction(Transaction transaction) {
-        transactions.add(transaction);
+        allTransactions.add(transaction);
     }
 }

@@ -6,7 +6,6 @@ import com.rewards.program.points.domain.MonthlyTotal;
 import com.rewards.program.points.domain.Result;
 import com.rewards.program.points.domain.Transaction;
 import com.rewards.program.points.domain.Transactions;
-import com.rewards.program.points.service.PointsService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,42 +18,39 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 @SpringBootTest(classes = {PointsService.class})
-public class PointRewardsServiceTest {
+class PointRewardsServiceTest {
     @Autowired
     PointsService pointsService;
 
     ObjectMapper mapper;
     TypeReference<List<Result>> typeRef;
 
-    Transactions transactions = null;
+    Transactions allTransactions = null;
 
     @BeforeEach
     void setUp() throws ParseException {
-        transactions = new Transactions();
-        transactions.getTransactions().add(new Transaction("Joe Jackson", 90, "10/01/22"));
-        transactions.getTransactions().add(new Transaction("Joe Jackson", 90, "10/05/22"));
-        transactions.getTransactions().add(new Transaction("Joe Jackson", 100, "11/10/22"));
-        transactions.getTransactions().add(new Transaction("Joe Jackson", 100, "11/12/22"));
-        transactions.getTransactions().add(new Transaction("Joe Jackson", 120, "12/10/22"));
-        transactions.getTransactions().add(new Transaction("Joe Jackson", 120, "12/12/22"));
+        allTransactions = new Transactions();
+        allTransactions.getAllTransactions().add(new Transaction("Joe Jackson", 90, "10/01/22"));
+        allTransactions.getAllTransactions().add(new Transaction("Joe Jackson", 90, "10/05/22"));
+        allTransactions.getAllTransactions().add(new Transaction("Joe Jackson", 100, "11/10/22"));
+        allTransactions.getAllTransactions().add(new Transaction("Joe Jackson", 100, "11/12/22"));
+        allTransactions.getAllTransactions().add(new Transaction("Joe Jackson", 120, "12/10/22"));
+        allTransactions.getAllTransactions().add(new Transaction("Joe Jackson", 120, "12/12/22"));
 
-        transactions.getTransactions().add(new Transaction("Jill Gentry", 90, "10/10/22"));
-        transactions.getTransactions().add(new Transaction("Jill Gentry", 90, "10/15/22"));
-        transactions.getTransactions().add(new Transaction("Jill Gentry", 100, "11/10/22"));
-        transactions.getTransactions().add(new Transaction("Jill Gentry", 100, "11/25/22"));
-        transactions.getTransactions().add(new Transaction("Jill Gentry", 120, "12/10/22"));
-        transactions.getTransactions().add(new Transaction("Jill Gentry", 120, "12/25/22"));
+        allTransactions.getAllTransactions().add(new Transaction("Jill Gentry", 90, "10/10/22"));
+        allTransactions.getAllTransactions().add(new Transaction("Jill Gentry", 90, "10/15/22"));
+        allTransactions.getAllTransactions().add(new Transaction("Jill Gentry", 100, "11/10/22"));
+        allTransactions.getAllTransactions().add(new Transaction("Jill Gentry", 100, "11/25/22"));
+        allTransactions.getAllTransactions().add(new Transaction("Jill Gentry", 120, "12/10/22"));
+        allTransactions.getAllTransactions().add(new Transaction("Jill Gentry", 120, "12/25/22"));
 
-        transactions.getTransactions().add(new Transaction("Bill Hart", 90, "10/01/22"));
-        transactions.getTransactions().add(new Transaction("Bill Hart", 10, "10/01/22"));
-        transactions.getTransactions().add(new Transaction("Bill Hart", 100, "11/01/22"));
-        transactions.getTransactions().add(new Transaction("Bill Hart", 120, "11/01/22"));
-        transactions.getTransactions().add(new Transaction("Bill Hart", 120, "12/01/22"));
-        transactions.getTransactions().add(new Transaction("Bill Hart", 120, "12/25/22"));
+        allTransactions.getAllTransactions().add(new Transaction("Bill Hart", 90, "10/01/22"));
+        allTransactions.getAllTransactions().add(new Transaction("Bill Hart", 10, "10/01/22"));
+        allTransactions.getAllTransactions().add(new Transaction("Bill Hart", 100, "11/01/22"));
+        allTransactions.getAllTransactions().add(new Transaction("Bill Hart", 120, "11/01/22"));
+        allTransactions.getAllTransactions().add(new Transaction("Bill Hart", 120, "12/01/22"));
+        allTransactions.getAllTransactions().add(new Transaction("Bill Hart", 120, "12/25/22"));
 
         typeRef
                 = new TypeReference<List<Result>>() {
@@ -64,9 +60,9 @@ public class PointRewardsServiceTest {
     // /calcPoints
 
     @Test
-    public void testServiceMethods() throws Exception {
+    void testServiceMethods() throws Exception {
 
-        Map<String, List<Transaction>> customerToTransactionsMap = pointsService.getTransactionsByCustomerName(transactions);
+        Map<String, List<Transaction>> customerToTransactionsMap = pointsService.getTransactionsByCustomerName(allTransactions);
 
         List<Result> result = pointsService.buildResults(customerToTransactionsMap);
 
@@ -78,13 +74,13 @@ public class PointRewardsServiceTest {
 
         int total = pointsService.getTotal(transactionsByMonth);
 
-        Assertions.assertEquals(transactionsByMonth.size(), 3);
+        Assertions.assertEquals(3, transactionsByMonth.size());
 
         int totalCompare = transactionsByMonth.values().stream()
                 .flatMap(list -> list.stream())
                 .reduce(0, Integer::sum);
 
-        Assertions.assertEquals(totalCompare, total);
+        Assertions.assertEquals(total, totalCompare);
 
         List<String> months = transactionsByMonth.keySet().stream().collect(Collectors.toList());
         Assertions.assertTrue(months.contains("OCTOBER"));
@@ -100,7 +96,7 @@ public class PointRewardsServiceTest {
 
         total = pointsService.getTotal(transactionsByMonth);
 
-        Assertions.assertEquals(transactionsByMonth.size(), 3);
+        Assertions.assertEquals(3, transactionsByMonth.size());
 
         totalCompare = transactionsByMonth.values().stream()
                 .flatMap(list -> list.stream())
@@ -120,7 +116,7 @@ public class PointRewardsServiceTest {
 
         total = pointsService.getTotal(transactionsByMonth);
 
-        Assertions.assertEquals(transactionsByMonth.size(), 3);
+        Assertions.assertEquals(3, transactionsByMonth.size());
 
         totalCompare = transactionsByMonth.values().stream()
                 .flatMap(list -> list.stream())
@@ -143,10 +139,10 @@ public class PointRewardsServiceTest {
                 pointsService.buildResults(customerToTransactionsMap);
 
 
-        Assertions.assertEquals(pointsService.calcPoints(0), 0);
-        Assertions.assertEquals(pointsService.calcPoints(-5), 0);
-        Assertions.assertEquals(pointsService.calcPoints(50), 0);
-        Assertions.assertEquals(pointsService.calcPoints(100), 50);
-        Assertions.assertEquals(pointsService.calcPoints(101), 52);
+        Assertions.assertEquals(0, pointsService.calcPoints(0));
+        Assertions.assertEquals(0, pointsService.calcPoints(-5));
+        Assertions.assertEquals(0, pointsService.calcPoints(50));
+        Assertions.assertEquals(50, pointsService.calcPoints(100));
+        Assertions.assertEquals(52, pointsService.calcPoints(101));
     }
 }

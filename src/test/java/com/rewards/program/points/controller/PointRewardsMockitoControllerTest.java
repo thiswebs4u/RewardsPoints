@@ -25,7 +25,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class PointRewardsMockitoControllerTest {
+class PointRewardsMockitoControllerTest {
     @InjectMocks
     PointController pointController;
 
@@ -40,26 +40,26 @@ public class PointRewardsMockitoControllerTest {
     void setUp() throws ParseException {
         transactions = new Transactions();
 
-        transactions.getTransactions().add(new Transaction("Joe Jackson", 90, "10/01/22"));
-        transactions.getTransactions().add(new Transaction("Joe Jackson", 90, "10/05/22"));
-        transactions.getTransactions().add(new Transaction("Joe Jackson", 100, "11/10/22"));
-        transactions.getTransactions().add(new Transaction("Joe Jackson", 100, "11/12/22"));
-        transactions.getTransactions().add(new Transaction("Joe Jackson", 120, "12/10/22"));
-        transactions.getTransactions().add(new Transaction("Joe Jackson", 120, "12/12/22"));
+        transactions.getAllTransactions().add(new Transaction("Joe Jackson", 90, "10/01/22"));
+        transactions.getAllTransactions().add(new Transaction("Joe Jackson", 90, "10/05/22"));
+        transactions.getAllTransactions().add(new Transaction("Joe Jackson", 100, "11/10/22"));
+        transactions.getAllTransactions().add(new Transaction("Joe Jackson", 100, "11/12/22"));
+        transactions.getAllTransactions().add(new Transaction("Joe Jackson", 120, "12/10/22"));
+        transactions.getAllTransactions().add(new Transaction("Joe Jackson", 120, "12/12/22"));
 
-        transactions.getTransactions().add(new Transaction("Jill Gentry", 90, "10/10/22"));
-        transactions.getTransactions().add(new Transaction("Jill Gentry", 90, "10/15/22"));
-        transactions.getTransactions().add(new Transaction("Jill Gentry", 100, "11/10/22"));
-        transactions.getTransactions().add(new Transaction("Jill Gentry", 100, "11/25/22"));
-        transactions.getTransactions().add(new Transaction("Jill Gentry", 120, "12/10/22"));
-        transactions.getTransactions().add(new Transaction("Jill Gentry", 120, "12/25/22"));
+        transactions.getAllTransactions().add(new Transaction("Jill Gentry", 90, "10/10/22"));
+        transactions.getAllTransactions().add(new Transaction("Jill Gentry", 90, "10/15/22"));
+        transactions.getAllTransactions().add(new Transaction("Jill Gentry", 100, "11/10/22"));
+        transactions.getAllTransactions().add(new Transaction("Jill Gentry", 100, "11/25/22"));
+        transactions.getAllTransactions().add(new Transaction("Jill Gentry", 120, "12/10/22"));
+        transactions.getAllTransactions().add(new Transaction("Jill Gentry", 120, "12/25/22"));
 
-        transactions.getTransactions().add(new Transaction("Bill Hart", 90, "10/01/22"));
-        transactions.getTransactions().add(new Transaction("Bill Hart", 10, "10/01/22"));
-        transactions.getTransactions().add(new Transaction("Bill Hart", 100, "11/01/22"));
-        transactions.getTransactions().add(new Transaction("Bill Hart", 120, "11/01/22"));
-        transactions.getTransactions().add(new Transaction("Bill Hart", 120, "12/01/22"));
-        transactions.getTransactions().add(new Transaction("Bill Hart", 120, "12/25/22"));
+        transactions.getAllTransactions().add(new Transaction("Bill Hart", 90, "10/01/22"));
+        transactions.getAllTransactions().add(new Transaction("Bill Hart", 10, "10/01/22"));
+        transactions.getAllTransactions().add(new Transaction("Bill Hart", 100, "11/01/22"));
+        transactions.getAllTransactions().add(new Transaction("Bill Hart", 120, "11/01/22"));
+        transactions.getAllTransactions().add(new Transaction("Bill Hart", 120, "12/01/22"));
+        transactions.getAllTransactions().add(new Transaction("Bill Hart", 120, "12/25/22"));
         typeRef
                 = new TypeReference<List<Result>>() {
         };
@@ -67,7 +67,7 @@ public class PointRewardsMockitoControllerTest {
     }
 
     @Test
-    public void postTest() throws Exception {
+    void postTest() throws Exception {
 
         List<Result> serviceResult = Arrays.asList(new Result("Joe Jackson",
                 Arrays.asList(new MonthlyTotal("OCTOBER", 80),
@@ -79,7 +79,7 @@ public class PointRewardsMockitoControllerTest {
 
         ResponseEntity<String> controllerResult = pointController.getPoints(transactions);
 
-        assertEquals(controllerResult.getStatusCode(), HttpStatus.OK);
+        assertEquals(HttpStatus.OK, controllerResult.getStatusCode());
         List<Result> jsonToJavaObject = mapper.readValue(controllerResult.getBody(), typeRef);
         assertEquals(serviceResult.size(), jsonToJavaObject.size());
     }

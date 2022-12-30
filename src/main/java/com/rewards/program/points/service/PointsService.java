@@ -16,28 +16,27 @@ import java.util.stream.Collectors;
 public class PointsService {
 
     public List<Result> buildResults(Map<String, List<Transaction>> map) {
-        List<Result> results = map
+        return map
                 .entrySet()
                 .stream()
-                .map((e) -> {
+                .map(e -> {
                     Map<String, List<Integer>> transactionsByMonth = getTransactionsByMonth(map.get(e.getKey()));
                     return new Result(e.getKey(),
                             getTransactionsByMonthTotals(transactionsByMonth),
                             getTotal(transactionsByMonth));
                 })
                 .collect(Collectors.toList());
-        return results;
     }
     public Map<String, List<Transaction>> getTransactionsByCustomerName(Transactions transactions) {
-        Map<String, List<Transaction>> map = new HashMap<String, List<Transaction>>();
+        Map<String, List<Transaction>> map = new HashMap<>();
 
-        transactions.getTransactions().forEach(object ->
+        transactions.getAllTransactions().forEach(object ->
                 map.computeIfAbsent(object.getCustomer(), k -> new ArrayList<>())
                         .add(object));
         return map;
     }
     protected List<MonthlyTotal> getTransactionsByMonthTotals(Map<String, List<Integer>> monthTransactions) {
-        List list = new ArrayList();
+        List<MonthlyTotal> list = new ArrayList<>();
 
         for (String month : monthTransactions.keySet()) {
             list.add(new MonthlyTotal(month,monthTransactions.get(month).stream().reduce(0, Integer::sum)));
@@ -45,7 +44,7 @@ public class PointsService {
         return list;
     }
     protected Map<String, List<Integer>> getTransactionsByMonth(List<Transaction> trans) {
-        Map<String, List<Integer>> map = new HashMap<String, List<Integer>>();
+        Map<String, List<Integer>> map = new HashMap<>();
 
         trans.forEach(object ->
                 map.computeIfAbsent(object.getMonth(), k -> new ArrayList<>())

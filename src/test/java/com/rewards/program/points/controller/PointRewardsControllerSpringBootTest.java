@@ -28,7 +28,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(controllers = PointController.class)
-public class PointRewardsControllerSpringBootTest {
+class PointRewardsControllerSpringBootTest {
 
     @MockBean
     PointsService pointsService;
@@ -44,26 +44,26 @@ public class PointRewardsControllerSpringBootTest {
     void setUp() throws ParseException {
         transactions = new Transactions();
 
-        transactions.getTransactions().add(new Transaction("Joe Jackson", 90, "10/01/22"));
-        transactions.getTransactions().add(new Transaction("Joe Jackson", 90, "10/05/22"));
-        transactions.getTransactions().add(new Transaction("Joe Jackson", 100, "11/10/22"));
-        transactions.getTransactions().add(new Transaction("Joe Jackson", 100, "11/12/22"));
-        transactions.getTransactions().add(new Transaction("Joe Jackson", 120, "12/10/22"));
-        transactions.getTransactions().add(new Transaction("Joe Jackson", 120, "12/12/22"));
+        transactions.getAllTransactions().add(new Transaction("Joe Jackson", 90, "10/01/22"));
+        transactions.getAllTransactions().add(new Transaction("Joe Jackson", 90, "10/05/22"));
+        transactions.getAllTransactions().add(new Transaction("Joe Jackson", 100, "11/10/22"));
+        transactions.getAllTransactions().add(new Transaction("Joe Jackson", 100, "11/12/22"));
+        transactions.getAllTransactions().add(new Transaction("Joe Jackson", 120, "12/10/22"));
+        transactions.getAllTransactions().add(new Transaction("Joe Jackson", 120, "12/12/22"));
 
-        transactions.getTransactions().add(new Transaction("Jill Gentry", 90, "10/10/22"));
-        transactions.getTransactions().add(new Transaction("Jill Gentry", 90, "10/15/22"));
-        transactions.getTransactions().add(new Transaction("Jill Gentry", 100, "11/10/22"));
-        transactions.getTransactions().add(new Transaction("Jill Gentry", 100, "11/25/22"));
-        transactions.getTransactions().add(new Transaction("Jill Gentry", 120, "12/10/22"));
-        transactions.getTransactions().add(new Transaction("Jill Gentry", 120,  "12/25/22"));
+        transactions.getAllTransactions().add(new Transaction("Jill Gentry", 90, "10/10/22"));
+        transactions.getAllTransactions().add(new Transaction("Jill Gentry", 90, "10/15/22"));
+        transactions.getAllTransactions().add(new Transaction("Jill Gentry", 100, "11/10/22"));
+        transactions.getAllTransactions().add(new Transaction("Jill Gentry", 100, "11/25/22"));
+        transactions.getAllTransactions().add(new Transaction("Jill Gentry", 120, "12/10/22"));
+        transactions.getAllTransactions().add(new Transaction("Jill Gentry", 120,  "12/25/22"));
 
-        transactions.getTransactions().add(new Transaction("Bill Hart", 90,  "10/01/22"));
-        transactions.getTransactions().add(new Transaction("Bill Hart", 10,  "10/01/22"));
-        transactions.getTransactions().add(new Transaction("Bill Hart", 100,  "11/01/22"));
-        transactions.getTransactions().add(new Transaction("Bill Hart", 120,   "11/01/22"));
-        transactions.getTransactions().add(new Transaction("Bill Hart", 120,  "12/01/22"));
-        transactions.getTransactions().add(new Transaction("Bill Hart", 120,  "12/25/22"));
+        transactions.getAllTransactions().add(new Transaction("Bill Hart", 90,  "10/01/22"));
+        transactions.getAllTransactions().add(new Transaction("Bill Hart", 10,  "10/01/22"));
+        transactions.getAllTransactions().add(new Transaction("Bill Hart", 100,  "11/01/22"));
+        transactions.getAllTransactions().add(new Transaction("Bill Hart", 120,   "11/01/22"));
+        transactions.getAllTransactions().add(new Transaction("Bill Hart", 120,  "12/01/22"));
+        transactions.getAllTransactions().add(new Transaction("Bill Hart", 120,  "12/25/22"));
         typeRef
                 = new TypeReference<List<Result>>() {};
         mapper = new ObjectMapper();
@@ -71,7 +71,7 @@ public class PointRewardsControllerSpringBootTest {
     // /calcPoints
 
     @Test
-    public void postTest() throws Exception {
+    void postTest() throws Exception {
 
         List<Result> serviceResult = Arrays.asList(new Result("Joe Jackson",
                 Arrays.asList(new MonthlyTotal("OCTOBER",80),
